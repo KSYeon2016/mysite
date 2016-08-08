@@ -12,7 +12,7 @@ import kr.ac.sungkyul.mysite.vo.UserVo;
 import kr.ac.sungkyul.web.Action;
 import kr.ac.sungkyul.web.WebUtil;
 
-public class ModifyFormAction implements Action {
+public class ModifyAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,15 +29,21 @@ public class ModifyFormAction implements Action {
 			return;
 		}
 		
-		// 인증이 되어 있음, 사용자 번호를 가지고 UserVo를 받아옴
 		Long no = authUser.getNo();
+		String name = request.getParameter("name");
+		String password = request.getParameter("password");
+		String gender = request.getParameter("gender");
+		
+		UserVo vo = new UserVo();
+		vo.setNo(no);
+		vo.setName(name);
+		vo.setPassword(password);
+		vo.setGender(gender);
+		
 		UserDao dao = new UserDao();
+		dao.update(vo);
 		
-		UserVo vo = dao.get(no);
-		
-		request.setAttribute("userVo", vo);
-		
-		WebUtil.forward("/WEB-INF/views/user/modifyform.jsp", request, response);
+		WebUtil.redirect("/mysite/user?a=modifyform&res=success", request, response);
 	}
 
 }
