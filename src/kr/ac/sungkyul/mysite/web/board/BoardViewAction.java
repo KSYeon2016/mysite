@@ -18,6 +18,7 @@ public class BoardViewAction implements Action {
 		
 		BoardDao dao = new BoardDao();
 		BoardVo board = dao.getBoard(no);
+		dao.updateViewCount(no);
 		
 		request.setAttribute("board", board);
 		
