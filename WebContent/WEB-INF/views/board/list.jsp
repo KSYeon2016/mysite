@@ -36,7 +36,7 @@
 					%>
 					<tr>
 						<td><%=vo.getNo() %></td>
-						<td><a href=""><%=vo.getTitle() %></a></td>
+						<td><a href="/mysite/board?a=view"><%=vo.getTitle() %></a></td>
 						<td><%=vo.getWriter() %></td>
 						<td><%=vo.getViewCount() %></td>
 						<td><%=vo.getRegDate() %></td>

@@ -13,6 +13,8 @@ public class BoardActionFactory extends ActionFactory {
 			action = new BoardWriteFormAction();
 		} else if("write".equals(actionName)){
 			action = new BoardWriteAction();
+		} else if("view".equals(actionName)){
+			action = new BoardViewAction();
 		} else {
 			action = new BoardListAction();
 		}

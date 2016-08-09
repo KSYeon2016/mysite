@@ -35,13 +35,14 @@ public class BoardDao {
 		try{
 			conn = getConnection();
 			
-			String sql = "insert into BOARD values(seq_board.nextval, ?, ?, sysdate, 0, ?, 1, 1, ?)";
+			String sql = "insert into BOARD "
+					+ "		values(seq_board.nextval, ?, ?, sysdate, 0, "
+					+ "			  (select max(GROUP_NO) from BOARD)+1, 1, 1, ?)";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, vo.getTitle());
 			pstmt.setString(2, vo.getContent());
-			pstmt.setInt(3, vo.getGroupNo());
-			pstmt.setLong(4, vo.getUserNo());
+			pstmt.setLong(3, vo.getUserNo());
 			
 			count = pstmt.executeUpdate();
 		} catch(SQLException e){
