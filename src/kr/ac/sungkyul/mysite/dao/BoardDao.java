@@ -27,6 +27,126 @@ public class BoardDao {
 		return conn;
 	}
 	
+	public void update(BoardVo vo){
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try{
+			conn = getConnection();
+			
+			Long no = vo.getNo();
+			String title = vo.getTitle();
+			String content = vo.getContent();
+			
+			String sql = "update BOARD set title=?, content=? where no=?";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, title);
+			pstmt.setString(2, content);
+			pstmt.setLong(3, no);
+			
+			pstmt.executeUpdate();
+		} catch(SQLException e){
+			e.printStackTrace();
+		} finally {
+			try{
+				if(pstmt != null){
+					pstmt.close();
+				}
+				
+				if(conn != null){
+					conn.close();
+				}
+			} catch(SQLException e){
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void delete(Long no){
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try{
+			conn = getConnection();
+			
+			String sql = "delete from board where no=?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, no);
+			
+			pstmt.executeUpdate();
+		} catch(SQLException e){
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null){
+					pstmt.close();
+				}
+				
+				if(conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} 
+		}
+	}
+	
+	public BoardVo getBoard(Long no){
+		BoardVo vo = new BoardVo();
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try{
+			conn = getConnection();
+
+			String sql = "select no, title, content, user_no "
+					+ "		from BOARD "
+					+ "		where no=?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, no);
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				Long boardNo = rs.getLong(1);
+				String title = rs.getString(2);
+				String content = rs.getString(3);
+				Long userNo = rs.getLong(4);
+				
+				vo = new BoardVo();
+				vo.setNo(boardNo);
+				vo.setTitle(title);
+				vo.setContent(content);
+				vo.setUserNo(userNo);
+			}
+		} catch(SQLException e){
+			e.printStackTrace();
+		} finally {
+			try{
+				if(rs != null){
+					rs.close();
+				}
+				
+				if(pstmt != null){
+					pstmt.close();
+				}
+				
+				if(conn != null){
+					conn.close();
+				}
+			} catch(SQLException e){
+				e.printStackTrace();
+			}
+		}
+		
+		return vo;
+	}
+	
 	public boolean insert(BoardVo vo){
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -37,7 +157,7 @@ public class BoardDao {
 			
 			String sql = "insert into BOARD "
 					+ "		values(seq_board.nextval, ?, ?, sysdate, 0, "
-					+ "			  (select max(GROUP_NO) from BOARD)+1, 1, 1, ?)";
+					+ "			  nvl((select max(GROUP_NO) from BOARD), 1)+1, 1, 1, ?)";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, vo.getTitle());
@@ -79,7 +199,7 @@ public class BoardDao {
 			
 			String sql = "select b.no, b.title, b.content, "
 					+ "			 to_char(b.reg_date, 'yyyy-mm-dd pm hh12:mi:ss'),"
-					+ "			 b.view_count, u.NAME "
+					+ "			 b.view_count, u.NAME, b.user_no "
 					+ "		from board b, users u "
 					+ "		where b.USER_NO = u.NO "
 					+ "		order by b.REG_DATE desc";
@@ -92,6 +212,7 @@ public class BoardDao {
 				String regDate = rs.getString(4);
 				Integer viewCount = rs.getInt(5);
 				String writer = rs.getString(6);
+				Long userNo = rs.getLong(7);
 				
 				BoardVo vo = new BoardVo();
 				vo.setNo(no);
@@ -100,6 +221,7 @@ public class BoardDao {
 				vo.setRegDate(regDate);
 				vo.setViewCount(viewCount);
 				vo.setWriter(writer);
+				vo.setUserNo(userNo);
 				
 				list.add(vo);
 			}

@@ -1,11 +1,7 @@
-<%@page import="kr.ac.sungkyul.mysite.vo.UserVo"%>
-<%@page import="kr.ac.sungkyul.mysite.vo.BoardVo"%>
-<%@page import="java.util.List"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%
-	List<BoardVo> list = (List<BoardVo>)request.getAttribute("list");
-	UserVo authUser = (UserVo)session.getAttribute("authUser");
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +11,7 @@
 </head>
 <body>
 	<div id="container">
-		<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+		<c:import url='/WEB-INF/views/include/header.jsp'/>
 		<div id="content">
 			<div id="board">
 				<form id="search_form" action="" method="post">
@@ -30,21 +26,21 @@
 						<th>조회수</th>
 						<th>작성일</th>
 						<th>&nbsp;</th>
-					</tr>				
-					<%
-						for(BoardVo vo : list){
-					%>
-					<tr>
-						<td><%=vo.getNo() %></td>
-						<td><a href="/mysite/board?a=view"><%=vo.getTitle() %></a></td>
-						<td><%=vo.getWriter() %></td>
-						<td><%=vo.getViewCount() %></td>
-						<td><%=vo.getRegDate() %></td>
-						<td><a href="" class="del">삭제</a></td>
 					</tr>
-					<%
-						}
-					%>
+					<c:forEach var='vo' items='${list }'>
+						<tr>
+							<td>${vo.no }</td>
+							<td><a href="/mysite/board?a=view&no=${vo.no }">${vo.title }</a></td>
+							<td>${vo.writer }</td>
+							<td>${vo.viewCount }</td>
+							<td>${vo.regDate }</td>
+							<td>
+								<c:if test='${vo.userNo == authUser.no }'>
+									<a href="/mysite/board?a=delete&no=${vo.no }" class="del">삭제</a>
+								</c:if>
+							</td>
+						</tr>
+					</c:forEach>
 				</table>
 				
 				<!-- begin:paging -->
@@ -61,19 +57,15 @@
 	            </div>
 	            <!-- end:paging -->
             
-           		<%
-           			if(authUser != null){
-           		%>
-				<div class="bottom">
-					<a href="/mysite/board?a=writeform" id="new-book">글쓰기</a>
-				</div>
-				<%
-           			}
-				%>
+            	<c:if test='${authUser != null }'>
+					<div class="bottom">
+						<a href="/mysite/board?a=writeform" id="new-book">글쓰기</a>
+					</div>
+				</c:if>
 			</div>
 		</div>
-		<jsp:include page="/WEB-INF/views/include/navi.jsp"></jsp:include>
-		<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+		<c:import url='/WEB-INF/views/include/navi.jsp'></c:import>
+		<c:import url='/WEB-INF/views/include/footer.jsp'></c:import>
 	</div>
 </body>
 </html>
