@@ -1,8 +1,9 @@
-<%@page import="kr.ac.sungkyul.mysite.vo.GuestBookVo"%>
-<%@page import="java.util.List"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-	List<GuestBookVo> list = (List<GuestBookVo>)request.getAttribute("list");
+	pageContext.setAttribute("newLine", "\n");
 %>
 <!doctype html>
 <html>
@@ -32,28 +33,25 @@
 					</table>
 				</form>
 				<ul>
-					<%
-						for(GuestBookVo vo : list){
-					%>
-					<li>
-						<table>
-							<tr>
-								<td>[<%=vo.getNo() %>]</td>
-								<td><%=vo.getName() %></td>
-								<td><%=vo.getRegDate() %></td>
-								<td><a href="/mysite/gb?a=deleteform&no=<%=vo.getNo() %>">삭제</a></td>
-							</tr>
-							<tr>
-								<td colspan=4>
-								<%=vo.getContent().replaceAll("\n", "<br>") %>	
-								</td>
-							</tr>
-						</table>
-						<br>
-					</li>
-					<%
-						}
-					%>
+					<c:set var="countList" value="${fn:length(list) }"></c:set>
+					<c:forEach var='vo' items='${list }' varStatus='status'>
+						<li>
+							<table>
+								<tr>
+									<td>[${countList - status.index}]</td>
+									<td>${vo.name }</td>
+									<td>${vo.regDate }</td>
+									<td><a href="/mysite/gb?a=deleteform&no=${vo.no }">삭제</a></td>
+								</tr>
+								<tr>
+									<td colspan=4>
+									${fn:replace(vo.content, newLine, "<br>") }
+									</td>
+								</tr>
+							</table>
+							<br>
+						</li>
+					</c:forEach>
 				</ul>
 			</div>
 		</div>
