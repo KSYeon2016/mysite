@@ -27,6 +27,75 @@ public class BoardDao {
 		return conn;
 	}
 	
+	public List<BoardVo> getList(Integer page, Integer row){
+		List<BoardVo> list = new ArrayList<BoardVo>();
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try{
+			conn = getConnection();
+			
+			String sql = "select no, title, content, reg_date, view_count, name, user_no, rn "
+					+ "		from (select a.*, ROWNUM as rn "
+					+ "				from (select b.no, b.title, b.content, "
+					+ "							 to_char(b.reg_date, 'yyyy-mm-dd pm hh12:mi:ss') as reg_date, "
+					+ "							 b.view_count, u.NAME, b.user_no "
+					+ "						from board b, users u "
+					+ "						where b.USER_NO = u.NO "
+					+ "						order by b.REG_DATE desc) a) "
+					+ "		where rn >= ? and rn <= ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, (page-1)*row+1);
+			pstmt.setInt(2, page*row);
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()){
+				Long no = rs.getLong(1);
+				String title = rs.getString(2);
+				String content = rs.getString(3);
+				String regDate = rs.getString(4);
+				Integer viewCount = rs.getInt(5);
+				String writer = rs.getString(6);
+				Long userNo = rs.getLong(7);
+				
+				BoardVo vo = new BoardVo();
+				vo.setNo(no);
+				vo.setTitle(title);
+				vo.setContent(content);
+				vo.setRegDate(regDate);
+				vo.setViewCount(viewCount);
+				vo.setWriter(writer);
+				vo.setUserNo(userNo);
+				
+				list.add(vo);
+			}
+		} catch(SQLException e){
+			e.printStackTrace();
+		} finally {
+			try{
+				if(rs != null){
+					rs.close();
+				}
+				
+				if(pstmt != null){
+					pstmt.close();
+				}
+				
+				if(conn != null){
+					conn.close();
+				}
+			} catch(SQLException e){
+				e.printStackTrace();
+			}
+		}
+		
+		return list;
+	}
+	
 	public void updateViewCount(Long no){
 		Connection conn = null;
 		PreparedStatement pstmt = null;

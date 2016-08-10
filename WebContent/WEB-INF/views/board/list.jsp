@@ -27,7 +27,7 @@
 						<th>작성일</th>
 						<th>&nbsp;</th>
 					</tr>
-					<c:forEach var='vo' items='${list }'>
+					<c:forEach var='vo' items='${pageList }'>
 						<tr>
 							<td>${vo.no }</td>
 							<td><a href="/mysite/board?a=view&no=${vo.no }">${vo.title }</a></td>
@@ -46,13 +46,29 @@
 				<!-- begin:paging -->
 	            <div class="pager">
 	               <ul>
-	                  <li><a href="">◀</a></li>
-	                  <li><a href="">1</a></li>
-	                  <li class="selected">2</li>
-	                  <li><a href="">3</a></li>
-	                  <li><a href="">4</a></li>
-	                  <li><a href="">5</a></li>
-	                  <li><a href="">▶</a></li>
+	               <c:if test='${countPage > 5 }'>
+	               		<li>
+		               		<c:if test='${(page != null) && (page != 1) }'>
+		                  		<a href="/mysite/board?page=${page-1 }">◀</a>
+							</c:if>
+						</li>
+	               </c:if>
+	                  <c:forEach begin='${minPage }' end='${maxPage }' step='1' var='i'>
+		            	  <c:choose>
+		            	  	<c:when test='${page == i}'>
+		            	  		<li class="selected">
+		            	  	</c:when>
+		            	  	<c:otherwise>
+		            	  		<li>
+		            	  	</c:otherwise>
+		            	  </c:choose>
+		            	  <a href="/mysite/board?page=${i }">${i }</a></li>
+	                  </c:forEach>
+	               <c:if test='${countPage > 5 }'>
+	               		<c:if test='${(page != null) && (page != countPage) }'>
+	                  		<li><a href="/mysite/board?page=${page+1 }">▶</a></li>
+	                  	</c:if>
+	               </c:if>
 	               </ul>
 	            </div>
 	            <!-- end:paging -->

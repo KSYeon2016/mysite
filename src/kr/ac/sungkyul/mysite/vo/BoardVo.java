@@ -9,6 +9,7 @@ public class BoardVo {
 	private String regDate;
 	private Integer groupNo;
 	private Long userNo;
+	private Integer rn;
 	
 	public Long getNo() {
 		return no;
@@ -58,6 +59,13 @@ public class BoardVo {
 	}
 	public void setUserNo(Long userNo) {
 		this.userNo = userNo;
+	}
+	
+	public Integer getRn() {
+		return rn;
+	}
+	public void setRn(Integer rn) {
+		this.rn = rn;
 	}
 	
 	@Override
