@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class BoardDao {
 		return conn;
 	}
 	
-	public List<BoardVo> getList(Integer page, Integer row){
+	public List<BoardVo> getList(Integer page, Integer row, String kwd){
 		List<BoardVo> list = new ArrayList<BoardVo>();
 		
 		Connection conn = null;
@@ -44,13 +43,14 @@ public class BoardDao {
 					+ "							 b.view_count, u.NAME, b.user_no "
 					+ "						from board b, users u "
 					+ "						where b.USER_NO = u.NO "
-					+ "						order by b.REG_DATE desc) a) "
+					+ "						order by b.REG_DATE desc) a where a.title like ?) "
 					+ "		where rn >= ? and rn <= ?";
 			
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setInt(1, (page-1)*row+1);
-			pstmt.setInt(2, page*row);
+			pstmt.setString(1, "%" + kwd + "%");
+			pstmt.setInt(2, (page-1)*row+1);
+			pstmt.setInt(3, page*row);
 			
 			rs = pstmt.executeQuery();
 			while(rs.next()){
@@ -287,26 +287,27 @@ public class BoardDao {
 		return (count == 1);
 	}
 	
-	public List<BoardVo> getList(){
+	public List<BoardVo> getList(String kwd){
 		List<BoardVo> list = new ArrayList<BoardVo>();
 		
 		Connection conn = null;
-		Statement stmt = null;
+		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
 		try{
 			conn = getConnection();
 			
-			stmt = conn.createStatement();
-			
 			String sql = "select b.no, b.title, b.content, "
 					+ "			 to_char(b.reg_date, 'yyyy-mm-dd pm hh12:mi:ss'),"
 					+ "			 b.view_count, u.NAME, b.user_no "
 					+ "		from board b, users u "
-					+ "		where b.USER_NO = u.NO "
+					+ "		where b.USER_NO = u.NO and b.title like ?"
 					+ "		order by b.REG_DATE desc";
+			pstmt = conn.prepareStatement(sql);
 			
-			rs = stmt.executeQuery(sql);
+			pstmt.setString(1, "%" + kwd + "%");
+			
+			rs = pstmt.executeQuery();
 			while(rs.next()){
 				Long no = rs.getLong(1);
 				String title = rs.getString(2);
@@ -335,8 +336,8 @@ public class BoardDao {
 					rs.close();
 				}
 				
-				if(stmt != null){
-					stmt.close();
+				if(pstmt != null){
+					pstmt.close();
 				}
 				
 				if(conn != null){

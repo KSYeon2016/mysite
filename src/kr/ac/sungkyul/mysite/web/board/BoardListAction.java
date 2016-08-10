@@ -7,15 +7,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.sun.glass.ui.Robot;
-
 import kr.ac.sungkyul.mysite.dao.BoardDao;
 import kr.ac.sungkyul.mysite.vo.BoardVo;
 import kr.ac.sungkyul.web.Action;
 import kr.ac.sungkyul.web.WebUtil;
 
 public class BoardListAction implements Action {
-	private static final int ROW = 1;
+	private static final int ROW = 5;
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -27,9 +25,15 @@ public class BoardListAction implements Action {
 			page = 1;
 		}
 		
+		String kwd = request.getParameter("kwd");
+		
+		if(kwd == null){
+			kwd = "";
+		}
+		
 		BoardDao dao = new BoardDao();
-		List<BoardVo> list = dao.getList();
-		List<BoardVo> pageList = dao.getList(page, ROW);
+		List<BoardVo> list = dao.getList(kwd);
+		List<BoardVo> pageList = dao.getList(page, ROW, kwd);
 		
 		// countPage 계산
 		Integer boardLength = list.size();	// 글의 수
@@ -64,6 +68,7 @@ public class BoardListAction implements Action {
 		request.setAttribute("countPage", countPage);
 		request.setAttribute("minPage", minPage);
 		request.setAttribute("maxPage", maxPage);
+		request.setAttribute("kwd", kwd);
 		
 		WebUtil.forward("/WEB-INF/views/board/list.jsp", request, response);
 	}

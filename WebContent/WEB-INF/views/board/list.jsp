@@ -14,8 +14,8 @@
 		<c:import url='/WEB-INF/views/include/header.jsp'/>
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="" method="post">
-					<input type="text" id="kwd" name="kwd" value="">
+				<form id="search_form" action="/mysite/board" method="post">
+					<input type="text" id="kwd" name="kwd" value="${kwd }">
 					<input type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
@@ -49,7 +49,7 @@
 	               <c:if test='${countPage > 5 }'>
 	               		<li>
 		               		<c:if test='${(page != null) && (page != 1) }'>
-		                  		<a href="/mysite/board?page=${page-1 }">◀</a>
+		                  		<a href="/mysite/board?page=${page-1 }&kwd=${kwd }">◀</a>
 							</c:if>
 						</li>
 	               </c:if>
@@ -62,11 +62,11 @@
 		            	  		<li>
 		            	  	</c:otherwise>
 		            	  </c:choose>
-		            	  <a href="/mysite/board?page=${i }">${i }</a></li>
+		            	  <a href="/mysite/board?page=${i }&kwd=${kwd }">            	  ${i }</a></li>
 	                  </c:forEach>
 	               <c:if test='${countPage > 5 }'>
 	               		<c:if test='${(page != null) && (page != countPage) }'>
-	                  		<li><a href="/mysite/board?page=${page+1 }">▶</a></li>
+	                  		<li><a href="/mysite/board?page=${page+1 }&kwd=${kwd }">▶</a></li>
 	                  	</c:if>
 	               </c:if>
 	               </ul>
