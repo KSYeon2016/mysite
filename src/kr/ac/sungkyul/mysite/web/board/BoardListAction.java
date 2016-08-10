@@ -13,7 +13,7 @@ import kr.ac.sungkyul.web.Action;
 import kr.ac.sungkyul.web.WebUtil;
 
 public class BoardListAction implements Action {
-	private static final int ROW = 5;
+	private static final int ROW = 1;
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

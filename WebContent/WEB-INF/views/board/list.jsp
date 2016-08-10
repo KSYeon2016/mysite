@@ -48,8 +48,8 @@
 	               <ul>
 	               <c:if test='${countPage > 5 }'>
 	               		<li>
-		               		<c:if test='${(page != null) && (page != 1) }'>
-		                  		<a href="/mysite/board?page=${page-1 }&kwd=${kwd }">◀</a>
+		               		<c:if test='${(page != null) && (page > 5) }'>
+		                  		<a href="/mysite/board?page=${page-5 }&kwd=${kwd }">◀</a>
 							</c:if>
 						</li>
 	               </c:if>
@@ -65,8 +65,8 @@
 		            	  <a href="/mysite/board?page=${i }&kwd=${kwd }">            	  ${i }</a></li>
 	                  </c:forEach>
 	               <c:if test='${countPage > 5 }'>
-	               		<c:if test='${(page != null) && (page != countPage) }'>
-	                  		<li><a href="/mysite/board?page=${page+1 }&kwd=${kwd }">▶</a></li>
+	               		<c:if test='${(page != null) && (page <= countPage-5) }'>
+	                  		<li><a href="/mysite/board?page=${page+5 }&kwd=${kwd }">▶</a></li>
 	                  	</c:if>
 	               </c:if>
 	               </ul>
