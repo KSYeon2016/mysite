@@ -33,11 +33,10 @@ public class BoardListAction implements Action {
 		}
 		
 		BoardDao dao = new BoardDao();
-		List<BoardVo> list = dao.getList(kwd);
 		List<BoardVo> pageList = dao.getList(page, ROW, kwd);
 		
 		// countPage 계산
-		Integer boardLength = list.size();	// 글의 수
+		Integer boardLength = dao.totalBoard(kwd);	// 글의 수
 		Integer i = boardLength % ROW;
 		Integer countPage = 0;
 		if(i == 0){
