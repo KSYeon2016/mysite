@@ -30,9 +30,11 @@
 					<c:forEach var='vo' items='${pageList }'>
 						<tr>
 							<td>${vo.no }</td>
-							<td><a href="/mysite/board?a=view&no=${vo.no }">
-								<c:forEach begin='1' end='${vo.depth-1 }' step='1' var='i'>></c:forEach>
-							${vo.title }</a></td>
+							<td style="text-align:left; padding-left:${20*(vo.depth-1)}px">
+								<c:if test='${vo.depth > 1 }'>
+									<img src="/mysite/assets/images/re.gif">
+								</c:if>
+								<a href="/mysite/board?a=view&no=${vo.no }&page=${param.page}">${vo.title }</a></td>
 							<td>${vo.writer }</td>
 							<td>${vo.viewCount }</td>
 							<td>${vo.regDate }</td>
