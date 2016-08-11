@@ -94,15 +94,18 @@ public class BoardDao {
 		try{
 			conn = getConnection();
 			
-			String sql = "select no, title, content, reg_date, view_count, name, user_no, rn "
+			String sql = "select no, title, content, reg_date, view_count, name, user_no, depth "
 					+ "		from (select a.*, ROWNUM as rn "
 					+ "				from (select b.no, b.title, b.content, "
 					+ "							 to_char(b.reg_date, 'yyyy-mm-dd pm hh12:mi:ss') as reg_date, "
-					+ "							 b.view_count, u.NAME, b.user_no "
+					+ "							 b.view_count, b.group_no, b.order_no, "
+					+ "							 b.depth, u.NAME, b.user_no "
 					+ "						from board b, users u "
 					+ "						where b.USER_NO = u.NO "
-					+ "						order by group_no desc, order_no asc) a where a.title like ?) "
-					+ "		where rn >= ? and rn <= ?";
+					+ "						order by group_no desc, order_no asc) a "
+					+ "				where a.title like ?) "
+					+ "		where rn >= ? and rn <= ? "
+					+ "		order by group_no desc, order_no asc";
 			
 			pstmt = conn.prepareStatement(sql);
 			
@@ -119,6 +122,7 @@ public class BoardDao {
 				Integer viewCount = rs.getInt(5);
 				String writer = rs.getString(6);
 				Long userNo = rs.getLong(7);
+				Integer depth = rs.getInt(8);
 				
 				BoardVo vo = new BoardVo();
 				vo.setNo(no);
@@ -128,6 +132,7 @@ public class BoardDao {
 				vo.setViewCount(viewCount);
 				vo.setWriter(writer);
 				vo.setUserNo(userNo);
+				vo.setDepth(depth);
 				
 				list.add(vo);
 			}

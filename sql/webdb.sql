@@ -8,7 +8,7 @@ commit;
 update BOARD set VIEW_COUNT=(select VIEW_COUNT from BOARD where no=5)+1 where no=5;
 select VIEW_COUNT from BOARD where no=5;
 
-select no, title, content, reg_date, view_count, name, user_no, rn, group_no, order_no
+select no, title, content, reg_date, view_count, name, user_no, rn, group_no, order_no, depth
   from (select a.*, ROWNUM as rn from (select b.no, b.title, b.content, to_char(b.reg_date, 'yyyy-mm-dd pm hh12:mi:ss') as reg_date, b.view_count, b.group_no, b.order_no, b.depth, u.NAME, b.user_no
           from board b, users u 
           where b.USER_NO = u.NO

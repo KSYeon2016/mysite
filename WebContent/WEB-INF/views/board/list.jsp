@@ -30,7 +30,9 @@
 					<c:forEach var='vo' items='${pageList }'>
 						<tr>
 							<td>${vo.no }</td>
-							<td><a href="/mysite/board?a=view&no=${vo.no }">${vo.title }</a></td>
+							<td><a href="/mysite/board?a=view&no=${vo.no }">
+								<c:forEach begin='1' end='${vo.depth-1 }' step='1' var='i'>></c:forEach>
+							${vo.title }</a></td>
 							<td>${vo.writer }</td>
 							<td>${vo.viewCount }</td>
 							<td>${vo.regDate }</td>
