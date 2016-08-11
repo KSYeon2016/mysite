@@ -21,6 +21,10 @@ public class BoardActionFactory extends ActionFactory {
 			action = new BoardModifyFormAction();
 		} else if("modify".equals(actionName)){
 			action = new BoardModifyAction();
+		} else if("comment".equals(actionName)){
+			action = new BoardCommentAction();
+		} else if("commentform".equals(actionName)){
+			action = new BoardCommentFormAction();
 		} else {
 			action = new BoardListAction();
 		}

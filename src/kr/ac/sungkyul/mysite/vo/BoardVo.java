@@ -10,6 +10,7 @@ public class BoardVo {
 	private Integer groupNo;
 	private Long userNo;
 	private Integer rn;
+	private Integer depth;
 	
 	public Long getNo() {
 		return no;
@@ -66,6 +67,13 @@ public class BoardVo {
 	}
 	public void setRn(Integer rn) {
 		this.rn = rn;
+	}
+	
+	public Integer getDepth() {
+		return depth;
+	}
+	public void setDepth(Integer depth) {
+		this.depth = depth;
 	}
 	
 	@Override

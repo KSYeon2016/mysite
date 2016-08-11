@@ -36,6 +36,9 @@
 				</table>
 				<div class="bottom">
 					<a href="/mysite/board">글목록</a>
+					<c:if test='${not empty authUser }'>
+						<a href="/mysite/board?a=commentform&no=${param.no }">답글</a>
+					</c:if>
 					<c:if test='${board.userNo == authUser.no }'>
 						<a href="/mysite/board?a=modifyform&no=${param.no }">글수정</a>
 					</c:if>

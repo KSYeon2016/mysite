@@ -13,7 +13,8 @@ import kr.ac.sungkyul.web.Action;
 import kr.ac.sungkyul.web.WebUtil;
 
 public class BoardListAction implements Action {
-	private static final int ROW = 1;
+	private static final int ROW = 5;
+	private static final int BOARD_ACCOUNT = 5;
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -69,6 +70,7 @@ public class BoardListAction implements Action {
 		request.setAttribute("minPage", minPage);
 		request.setAttribute("maxPage", maxPage);
 		request.setAttribute("kwd", kwd);
+		request.setAttribute("boardAccount", BOARD_ACCOUNT);
 		
 		WebUtil.forward("/WEB-INF/views/board/list.jsp", request, response);
 	}

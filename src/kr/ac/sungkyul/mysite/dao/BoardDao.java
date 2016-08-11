@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,63 @@ public class BoardDao {
 		return conn;
 	}
 	
+	public void insertComment(BoardVo vo, Long boardNo){
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		Statement stmt = null;
+		
+		try{
+			conn = getConnection();
+			
+			String sql = "insert into BOARD "
+					+ "		values(seq_board.nextval, ?, ?, sysdate, 0, "
+					+ "			  (select group_no from board where no = ?), "
+					+ "			  (select order_no from BOARD where no=?)+1, "
+					+ "			  (select depth from BOARD where no=?)+1, ?)";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, vo.getTitle());
+			pstmt.setString(2, vo.getContent());
+			pstmt.setLong(3, boardNo);
+			pstmt.setLong(4, boardNo);
+			pstmt.setLong(5, boardNo);
+			pstmt.setLong(6, vo.getUserNo());
+			
+			pstmt.executeUpdate();
+			
+			sql = "update BOARD set order_no = order_no+1 "
+					+ "where group_no=(select group_no "
+					+ "					from BOARD "
+					+ "					where no = (select max(no) from BOARD)) "
+					+ "						and order_no=(select order_no "
+					+ "										from BOARD "
+					+ "										where no = (select max(no) from BOARD)) "
+					+ "	and no <> (select max(no) from BOARD)";
+			stmt = conn.createStatement();
+			
+			stmt.executeUpdate(sql);
+		} catch(SQLException e){
+			e.printStackTrace();
+		} finally {
+			try{
+				if(stmt != null){
+					stmt.close();
+				}
+				
+				if(pstmt != null){
+					pstmt.close();
+				}
+				
+				if(conn != null){
+					conn.close();
+				}
+			} catch(SQLException e){
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public List<BoardVo> getList(Integer page, Integer row, String kwd){
 		List<BoardVo> list = new ArrayList<BoardVo>();
 		
@@ -43,7 +101,7 @@ public class BoardDao {
 					+ "							 b.view_count, u.NAME, b.user_no "
 					+ "						from board b, users u "
 					+ "						where b.USER_NO = u.NO "
-					+ "						order by b.REG_DATE desc) a where a.title like ?) "
+					+ "						order by group_no desc, order_no asc) a where a.title like ?) "
 					+ "		where rn >= ? and rn <= ?";
 			
 			pstmt = conn.prepareStatement(sql);

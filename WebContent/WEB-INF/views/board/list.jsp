@@ -46,10 +46,10 @@
 				<!-- begin:paging -->
 	            <div class="pager">
 	               <ul>
-	               <c:if test='${countPage > 5 }'>
+	               <c:if test='${countPage > boardAccount }'>
 	               		<li>
-		               		<c:if test='${(page != null) && (page > 5) }'>
-		                  		<a href="/mysite/board?page=${page-5 }&kwd=${kwd }">◀</a>
+		               		<c:if test='${(page != null) && (page > boardAccount) }'>
+		                  		<a href="/mysite/board?page=${page-boardAccount }&kwd=${kwd }">◀</a>
 							</c:if>
 						</li>
 	               </c:if>
@@ -62,11 +62,11 @@
 		            	  		<li>
 		            	  	</c:otherwise>
 		            	  </c:choose>
-		            	  <a href="/mysite/board?page=${i }&kwd=${kwd }">            	  ${i }</a></li>
+		            	  <a href="/mysite/board?page=${i }&kwd=${kwd }">${i }</a></li>
 	                  </c:forEach>
-	               <c:if test='${countPage > 5 }'>
-	               		<c:if test='${(page != null) && (page <= countPage-5) }'>
-	                  		<li><a href="/mysite/board?page=${page+5 }&kwd=${kwd }">▶</a></li>
+	               <c:if test='${countPage > boardAccount }'>
+	               		<c:if test='${(page != null) && (page <= countPage-boardAccount) }'>
+	                  		<li><a href="/mysite/board?page=${page+boardAccount }&kwd=${kwd }">▶</a></li>
 	                  	</c:if>
 	               </c:if>
 	               </ul>
