@@ -34,13 +34,13 @@
 								<c:if test='${vo.depth > 1 }'>
 									<img src="/mysite/assets/images/re.gif">
 								</c:if>
-								<a href="/mysite/board?a=view&no=${vo.no }&page=${param.page}">${vo.title }</a></td>
+								<a href="/mysite/board?a=view&no=${vo.no }&page=${page}&kwd=${kwd }">${vo.title }</a></td>
 							<td>${vo.writer }</td>
 							<td>${vo.viewCount }</td>
 							<td>${vo.regDate }</td>
 							<td>
 								<c:if test='${vo.userNo == authUser.no }'>
-									<a href="/mysite/board?a=delete&no=${vo.no }" class="del">삭제</a>
+									<a href="/mysite/board?a=delete&no=${vo.no }&page=${page}&kwd=${kwd}" class="del">삭제</a>
 								</c:if>
 							</td>
 						</tr>

@@ -15,11 +15,17 @@ public class BoardDeleteAction implements Action {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long no = Long.parseLong(request.getParameter("no"));
+		Integer page = Integer.parseInt(request.getParameter("page"));
+		String kwd = request.getParameter("kwd");
+		
+		if(kwd == null){
+			kwd = "";
+		}
 		
 		BoardDao dao = new BoardDao();
 		dao.delete(no);
 		
-		WebUtil.redirect("/mysite/board", request, response);
+		WebUtil.redirect("/mysite/board?page=" + page + "&kwd=" + kwd, request, response);
 		return;
 	}
 

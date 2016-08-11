@@ -17,11 +17,19 @@ public class BoardModifyFormAction implements Action {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long no = Long.parseLong(request.getParameter("no"));
 		
+		Integer page = 1;
+		try {
+			page = Integer.parseInt(request.getParameter("page"));
+		} catch( NumberFormatException e ) {
+			page = 1;
+		}
+		
 		BoardDao dao = new BoardDao();
 		BoardVo board = new BoardVo();
 		board = dao.getBoard(no);
 		
 		request.setAttribute("board", board);
+		request.setAttribute("page", page);
 		
 		WebUtil.forward("/WEB-INF/views/board/modify.jsp", request, response);
 	}

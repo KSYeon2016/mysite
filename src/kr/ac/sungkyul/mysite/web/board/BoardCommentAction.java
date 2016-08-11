@@ -19,6 +19,12 @@ public class BoardCommentAction implements Action {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		Integer page = Integer.parseInt(request.getParameter("page"));
+		
+		String kwd = request.getParameter("kwd");
+		if(kwd == null){
+			kwd = "";
+		}
 		
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
@@ -33,7 +39,7 @@ public class BoardCommentAction implements Action {
 		BoardDao dao = new BoardDao();
 		dao.insertComment(vo, boardNo);
 		
-		WebUtil.redirect("/mysite/board", request, response);
+		WebUtil.redirect("/mysite/board?page=" + page + "&kwd=" + kwd, request, response);
 	}
 
 }

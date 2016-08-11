@@ -20,7 +20,8 @@
 					</c:if>
 					<c:if test='${param.a == "commentform" }'>
 						<input type = "hidden" name = "a" value="comment">
-						<input type= "hidden" name="no" value=${param.no } />
+						<input type= "hidden" name = "no" value=${param.no } />
+						<input type= "hidden" name = "page" value=${param.page } />
 					</c:if>
 					<table class="tbl-ex">
 						<tr>
