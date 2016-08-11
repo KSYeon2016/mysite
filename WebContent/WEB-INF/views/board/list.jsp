@@ -52,8 +52,15 @@
 	               <ul>
 	               <c:if test='${countPage > boardAccount }'>
 	               		<li>
-		               		<c:if test='${(page != null) && (page > boardAccount) }'>
-		                  		<a href="/mysite/board?page=${page-boardAccount }&kwd=${kwd }">◀</a>
+		               		<c:if test='${(page != null) && (page != 1) }'>
+		                  		<c:choose>
+			               			<c:when test='${page-boardAccount < 1}'>
+			                  			<li><a href="/mysite/board?page=1&kwd=${kwd }">◀</a></li>
+			                  		</c:when>
+			                  		<c:otherwise>
+		                  				<li><a href="/mysite/board?page=${page-boardAccount }&kwd=${kwd }">◀</a></li>
+		                  			</c:otherwise>
+	                  			</c:choose>
 							</c:if>
 						</li>
 	               </c:if>
@@ -69,8 +76,15 @@
 		            	  <a href="/mysite/board?page=${i }&kwd=${kwd }">${i }</a></li>
 	                  </c:forEach>
 	               <c:if test='${countPage > boardAccount }'>
-	               		<c:if test='${(page != null) && (page <= countPage-boardAccount) }'>
-	                  		<li><a href="/mysite/board?page=${page+boardAccount }&kwd=${kwd }">▶</a></li>
+	               		<c:if test='${page != null && page != countPage}'>
+	               			<c:choose>
+		               			<c:when test='${page+boardAccount < countPage}'>
+		                  			<li><a href="/mysite/board?page=${page+boardAccount }&kwd=${kwd }">▶</a></li>
+		                  		</c:when>
+		                  		<c:otherwise>
+	                  				<li><a href="/mysite/board?page=${countPage }&kwd=${kwd }">▶</a></li>
+	                  			</c:otherwise>
+	                  		</c:choose>
 	                  	</c:if>
 	               </c:if>
 	               </ul>

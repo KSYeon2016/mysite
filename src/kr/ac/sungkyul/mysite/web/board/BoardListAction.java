@@ -49,16 +49,16 @@ public class BoardListAction implements Action {
 		// minPage, maxPage
 		Integer minPage = 0;
 		Integer maxPage = 0;
-		if(countPage > 5 && page > 3 && page < (countPage-2)){
+		if(countPage > BOARD_ACCOUNT && page > 3 && page < (countPage-2)){
 			minPage = page -2;
 			maxPage = page +2;
-		} else if(countPage > 5 && page >= (countPage-2)){
+		} else if(countPage > BOARD_ACCOUNT && page >= (countPage-2)){
 			minPage = countPage-4;
 			maxPage = countPage;
-		} else if(countPage > 5 && page <= 3){
+		} else if(countPage > BOARD_ACCOUNT && page <= 3){
 			minPage = 1;
 			maxPage = 5;
-		} else if(countPage <= 5){
+		} else if(countPage <= BOARD_ACCOUNT){
 			minPage = 1;
 			maxPage = countPage;
 		}
