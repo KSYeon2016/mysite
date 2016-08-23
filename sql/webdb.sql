@@ -28,5 +28,5 @@ select b.no, b.title, b.content, to_char(b.reg_date, 'yyyy-mm-dd pm hh12:mi:ss')
 
 insert into BOARD values(seq_board.nextval, '댓글', '테스트입니다', sysdate, 0, (select group_no from board where no = 1), (select order_no from BOARD where no=1)+1, (select depth from BOARD where no=1)+1, 2);
 update BOARD set order_no = order_no+1 where group_no=(select group_no from BOARD where no = (select max(no) from BOARD)) and order_no=(select order_no from BOARD where no = (select max(no) from BOARD)) and no <> (select max(no) from BOARD);
-commit;
-select * from board order by group_no desc, order_no asc;
+
+select count(*) from board where title like '%%';
