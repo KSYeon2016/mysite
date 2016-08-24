@@ -30,3 +30,6 @@ insert into BOARD values(seq_board.nextval, '댓글', '테스트입니다', sysd
 update BOARD set order_no = order_no+1 where group_no=(select group_no from BOARD where no = (select max(no) from BOARD)) and order_no=(select order_no from BOARD where no = (select max(no) from BOARD)) and no <> (select max(no) from BOARD);
 
 select count(*) from board where title like '%%';
+
+/* 이메일 중복체크 */
+select no, name, email from users where email = 'kg00003@naver.com';

@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kr.ac.sungkyul.mysite.dao.UserDao;
 import kr.ac.sungkyul.mysite.vo.UserVo;
 import kr.ac.sungkyul.web.Action;
 import net.sf.json.JSONObject;
@@ -17,20 +18,19 @@ public class CheckEmailAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String email = request.getParameter("email");
+		UserVo vo = new UserDao().get(email);
+		
 		response.setContentType("application/json; charset=utf-8"); 
 		PrintWriter out = response.getWriter();
 		
 		//out.println("{\"result\" : \"success\", \"exist\" : true}");\
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("result", "success");
-		map.put("data", true);
+		map.put("data", vo != null);	// true -> exist
+										// false -> not exist
 		
-		// 연습
-		UserVo vo = new UserVo();
-		vo.setEmail("aaa@gmail.com");
-		vo.setNo(1000L);
-		map.put("data2", vo);
-		
+		// JSON 문자열로 변환
 		// 자바 객체로부터 JSONObject를 하나 만듦
 		JSONObject jsonObject = JSONObject.fromObject(map);
 		out.println(jsonObject.toString());
